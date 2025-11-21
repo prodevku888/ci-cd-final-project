@@ -1,4 +1,4 @@
-name: CI Build
+name: CI workflow
 
 on:
   push:
@@ -11,15 +11,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: python:3.9-slim
     
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
 
       - name: Install dependencies
         run: |
@@ -27,9 +23,10 @@ jobs:
           pip install -r requirements.txt
 
       # Task 2: Linting step
-      - name: Lint with pylint
+      - name: Lint with flake8
         run: |
-          pylint service --max-line-length=127
+          flake8 service --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 service --count --max-complexity=10 --max-line-length=127 --statistics
 
       # Task 3: Test step
       - name: Run tests with nose
