@@ -1,0 +1,50 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: ci-cd-pipeline-simple
+spec:
+  params:
+    - name: repo-url
+      description: The git repository URL
+      type: string
+      default: "https://github.com/prodevku888/ci-cd-final-project.git"
+    - name: branch
+      description: The git branch to clone
+      type: string
+      default: "master"
+  workspaces:
+    - name: output
+  tasks:
+    - name: cleanup
+      taskRef:
+        name: cleanup
+      workspaces:
+        - name: source
+          workspace: output
+    
+    - name: git-clone
+      taskRef:
+        name: git-clone
+      runAfter:
+        - cleanup
+      params:
+        - name: url
+          value: $(params.repo-url)
+        - name: revision
+          value: $(params.branch)
+      workspaces:
+        - name: output
+          workspace: output
+    
+    - name: nose
+      taskRef:
+        name: nose
+      runAfter:
+        - git-clone
+      params:
+        - name: args
+          value: "-v --with-spec --spec-color"
+      workspaces:
+        - name: source
+          workspace: output

@@ -1,0 +1,21 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: ci-cd-pipeline-run
+spec:
+  pipelineRef:
+    name: ci-cd-pipeline
+  params:
+    - name: repo-url
+      value: "https://github.com/prodevku888/ci-cd-final-project.git"
+    - name: branch
+      value: "master"
+    - name: app-name
+      value: "cicd-app"
+    - name: build-image
+      value: "image-registry.openshift-image-registry.svc:5000/default/cicd-app:latest"
+  workspaces:
+    - name: output
+      persistentVolumeClaim:
+        claimName: oc-lab-pvc

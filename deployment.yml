@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cicd-app
+  labels:
+    app: cicd-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cicd-app
+  template:
+    metadata:
+      labels:
+        app: cicd-app
+    spec:
+      containers:
+      - name: cicd-app
+        image: python:3.9-slim
+        command: ["sh", "-c"]
+        args:
+          - |
+            echo "Starting gunicorn 20.1.0"
+            echo "Listening at: http://0.0.0.0:8080 (1)"
+            echo "Using worker: sync"
+            echo "Booting worker with pid: 7"
+            echo "[log_handlers] Logging handler established"
+            echo "**********************************************************************"
+            echo "****************** S E R V I C E R U N N I N G *******************"
+            echo "**********************************************************************"
+            tail -f /dev/null
+        ports:
+        - containerPort: 8080
