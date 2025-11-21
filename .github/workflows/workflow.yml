@@ -32,4 +32,4 @@ jobs:
 
       # Task 3: Test step
       - name: Run unit tests with nose
-        run: nosetests -v --with-spec --spec-color --with-coverage --cover-package=app
+        run: nosetests -v --with-spec --spec-color --with-coverage --cover-package=service
